@@ -1,0 +1,81 @@
+#MOSES related parameter settings
+###################
+[general params]
+###################
+kfd=10
+no_fsm=false
+candidates=1
+jobs=7
+##################
+[learning params]
+##################
+scorer=prerec
+perm_ratio=1.0
+#ctemp=0.00001
+ctemp=2
+hardness=1
+recall_min=0.2
+evals=10000
+noise=0.1
+revisit=0
+complexity_ratio=2
+######################
+[diversity pressure]
+######################
+dpressure=0.1
+dexp=1
+dst=tanimoto
+#########################
+[pre feature selection]
+#########################
+# or hc
+pfs_algo=inc
+# for inc and simple
+conf_seq=100
+#nfeats_seq=10,20,30
+nfeats_seq=20
+######################################
+[feature selection with MOSES param]
+######################################
+prune=0
+# we may have a sequence like this
+#fsm_nfeats_seq=2,6,10,14,18
+# for inc and simple
+fsm_hc_conf_seq=1.0 
+# for hc
+fsm_nfeats_seq=8
+# for hc                        
+#fsm_conf_seq=-0.1,-1.0,-10.0           
+fsm_conf_seq=-10.0
+focus_seq=active
+#focus_seq=all,active
+#focus_seq=all,active,incorrect,ai
+#seed_seq=none,add,init,xmplr
+seed_seq=init
+# or hc
+fsm_algo=inc
+# smp_pbty_seq=0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9
+smp_pbty_seq=0.1
+fsm_scorer_seq=mi
+# scorer_seq=mi,pre
+smd_threshold=0.000001
+inc_red_intensity=0.1
+hc_evals=10000  #changed from 10000
+hc_crossover_pop_size=120
+hc_widen_search=0
+hc_crossover=1
+breadth_first=1
+pre_min_activation=""
+pre_penalty=""
+#########################
+[model combination]
+#########################
+model_combination_noise=0.3
+complexity_amplifier=0.1
+prerec_simple_precision=true
+# my modificatoin
+#prerec_simple_precision=false
+# between 0 and 1
+maj_vote=0.5
+model_combination_min_recall=0.5
+

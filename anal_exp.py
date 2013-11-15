@@ -1,11 +1,10 @@
+#!/bin/python2.7
 import os
-import pandas
 import csv
 import argparse
 EVAL_TABLE_PATH="/home/addis-ai/opencog_ocpkg/opencog/build/opencog/comboreduct/main/eval-table"
 """Extract the combo programs from a given moses output file
-   params
-    moses output file,combo file to be saved
+   params    moses output file,combo file to be saved
 """
 def parse_output(outputf,combof):	
 	f = open(outputf,'r')
@@ -27,18 +26,25 @@ def eval_output(ifile,cfile,ofile):
 	if result!=0:
 		print "error while executing"
 		exit(0)	
-def values_of_col(csvf,col_name):
+"""get values of a given column name from a csv file
+   returns list of the column values without the column name
+   params csv file path,column name,delimiter char in the csv
+"""
+def values_of_col(csvf,col_name,sepchar):
 	col_values=[]
 	with open(csvf,'rb') as f:
-		reader=csv.reader(f)
-		next(reader) # escape the first line
-		for row in reader:
-			col_values.append(row[len(row)-1])
+		reader=csv.reader(f,delimiter=sepchar)
+		csv_list=list(reader)
+		header_row=csv_list[0]		
+		col_name_index=header_row.index(col_name)
+		for row in csv_list:
+			col_values.append(row[col_name_index])
+	del col_values[0] # remove the column name		
 	return col_values	
 """recall for fixed train test"""						
 def get_recall(predictedf,actualf):
-	actual_values = values_of_col(actualf,"OUT")
-	predicted_values = values_of_col(predictedf,"OUT")
+	actual_values = values_of_col(actualf,"OUT","\t")
+	predicted_values = values_of_col(predictedf,"OUT","\t")
 	true_positve=0
 	trues=0
 	assert len(actual_values) == len(predicted_values)
@@ -46,12 +52,12 @@ def get_recall(predictedf,actualf):
 		if actual_values[i] == '1':
 			trues += 1
 			if predicted_values[i] == '1':
-				true_positve += '1'
+				true_positve += 1
 	return true_positve/trues	
 """precision for fixed train test"""	
 def get_precision(predictedf,actualf):
-	actual_values = values_of_col(actualf,"OUT")
-	predicted_values = values_of_col(predictedf,"OUT")
+	actual_values = values_of_col(actualf,"OUT","\t")
+	predicted_values = values_of_col(predictedf,"OUT","\t")
 	true_positve=0
 	positive=0
 	assert len(actual_values) == len(predicted_values)
@@ -68,6 +74,16 @@ def save_result(data,resultf):
 	writer=csv.writer(resultf)
 	writer.writerows(result_csv)				
 if __name__ == "__main__":
+	print "parsing...evaluatin...scoring"
+	#dir="/media/MISGE@2AI/fixed-mp-analysis"
+	#dir2="/home/addis-ai/Desktop/mp/fixed-mp-analysis"
+	#print values_of_col("/home/addis-ai/Desktop/mp/moses-pytest/col_vals_test.csv","OUT","\t")
+	#parse_output(dir2+"/data/output.combo","/home/addis-ai/Desktop/mp/fixed-mp-analysis/data/onlycombo.combo")
+	#print values_of_col(dir+"/data/eval.csv","OUT")
+	#data=[0.1,0.3,0.4,0.5]
+	#dir_save="/home/addis-ai/Desktop/result.csv"
+	#save_result(data,dir_save)
+	#exit(0) # for testing the functions
 	usage = "usage: %prog [options]\n"
 	parser = argparse.ArgumentParser(usage)						
 	parser.add_argument("-i", "--mosesf",nargs=1,help = "moses binary file")
@@ -94,16 +110,9 @@ if __name__ == "__main__":
 	   mtrain_rec = get_recall(mtrain_evalf,os.path.join(trtstdir,mtrainfname))
 	   mtest_prec = get_precision(mtest_evalf,os.path.join(trtstdir,mtestfname))
 	   mtest_rec = get_recall(mtest_evalf,os.path.join(trtstdir,mtestfname))
-	   save_result([mtrain_prec,mtrain_rec,mtest_prec,mtest_rec],os.path.join(os.path.split(mosesfp_dir)[0],"results.csv"))	   	
+	   save_result([mtrain_prec,mtrain_rec,mtest_prec,mtest_rec],os.path.join(mosesfp_dir,"results.csv"))	   	
 	else:
 		parser.print_help()   
-	print "main"
-	dir="/media/MISGE@2AI/fixed-mp-analysis"
-	dir2="/home/addis-ai/Desktop/mp/fixed-mp-analysis"
-	#parse_output(dir2+"/data/output.combo","/home/addis-ai/Desktop/mp/fixed-mp-analysis/data/onlycombo.combo")
-	#print values_of_col(dir+"/data/eval.csv","OUT")
-	#data=[0.1,0.3,0.4,0.5]
-	#dir_save="/home/addis-ai/Desktop/result.csv"
-	#save_result(data,dir_save)
+	
 		
 	                     

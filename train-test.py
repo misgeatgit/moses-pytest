@@ -29,12 +29,12 @@ def get_test_list(f):
 		fobject=open(f,'r')
 		rows=csv.reader(fobject)		
 		mlist=list(rows)
-		test_dict[0]=mlist[0]
+		test_dict[0]=mlist[0] #add the header
 		prev_rands=[0]		
 		ln=int((len(mlist)-1)/3)				
 		for r in range(0,ln):
 			i=randint(1,len(mlist)-1)
-			while i in prev_rands: #make sure another valid index is selected
+			while i in prev_rands: #make sure a new valide index is selected
 				i=randint(1,len(mlist)-1)
 			prev_rands.append(i)
 			test_dict[i]=mlist[i]			
@@ -48,7 +48,7 @@ def	 get_train_list(f):
 		fobject=open(f,'r')
 		rows=csv.reader(fobject)
 		mlist=list(rows)
-		train_dict[0]=mlist[0]		
+		train_dict[0]=mlist[0] # add the header		
 		for r in range(1,len(mlist)):
 			if  r not in test_dict:			
 			    train_dict[r]=mlist[r]

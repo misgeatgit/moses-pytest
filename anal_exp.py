@@ -45,45 +45,46 @@ def values_of_col(csvf,col_name,sepchar):
 def get_recall(predictedf,actualf):
 	actual_values = values_of_col(actualf,"OUT","\t")
 	predicted_values = values_of_col(predictedf,"OUT","\t")
-	true_positve=0
-	trues=0
+	true_positve=0.0
+	trues=0.0
 	assert len(actual_values) == len(predicted_values)
+	#DEBUG OUTPUTS
+	#print "ACTUALF=%s PREDICTEDF=%s \n"%(actualf,predictedf)
+	#for i in range(0,len(actual_values)):
+	#	print "%s\t%s %s"%(str(i+1),actual_values[i],predicted_values[i])
+	#exit(0)
+	#END OF DEBUG	
 	for i in range(0,len(actual_values)):
 		if actual_values[i] == '1':
 			trues += 1
 			if predicted_values[i] == '1':
 				true_positve += 1
-	return true_positve/trues	
+	#print "TRUES=%s TRUE_POSITIVE=%s"%(str(trues),str(true_positve))
+	rounded_recall = true_positve/trues
+	return round(rounded_recall,4)
 """precision for fixed train test"""	
 def get_precision(predictedf,actualf):
 	actual_values = values_of_col(actualf,"OUT","\t")
 	predicted_values = values_of_col(predictedf,"OUT","\t")
-	true_positve=0
-	positive=0
+	true_positve = 0.0
+	positive = 0.0
 	assert len(actual_values) == len(predicted_values)
 	for i in range(0,len(actual_values)):
 		if predicted_values[i] == '1':
 			positive += 1
 			if actual_values[i] == '1':
 				true_positve += 1
-	return true_positve/positive
+	rounded_prec = true_positve/positive			
+	return round(rounded_prec,4)
 def save_result(data,resultf):
+	#print "RESULT FILE:%s"%resultf
 	header=["train_precision","train_recall","test_precision","test_recall"]
 	result_csv=[header,data]
 	resultf=open(resultf,"wb")
 	writer=csv.writer(resultf)
 	writer.writerows(result_csv)				
 if __name__ == "__main__":
-	print "parsing...evaluatin...scoring"
-	#dir="/media/MISGE@2AI/fixed-mp-analysis"
-	#dir2="/home/addis-ai/Desktop/mp/fixed-mp-analysis"
-	#print values_of_col("/home/addis-ai/Desktop/mp/moses-pytest/col_vals_test.csv","OUT","\t")
-	#parse_output(dir2+"/data/output.combo","/home/addis-ai/Desktop/mp/fixed-mp-analysis/data/onlycombo.combo")
-	#print values_of_col(dir+"/data/eval.csv","OUT")
-	#data=[0.1,0.3,0.4,0.5]
-	#dir_save="/home/addis-ai/Desktop/result.csv"
-	#save_result(data,dir_save)
-	#exit(0) # for testing the functions
+	print "parsing...evaluatin...scoring"	
 	usage = "usage: %prog [options]\n"
 	parser = argparse.ArgumentParser(usage)						
 	parser.add_argument("-i", "--mosesf",nargs=1,help = "moses binary file")
@@ -103,7 +104,7 @@ if __name__ == "__main__":
 	   parse_output(mose_resf,combof)
 	   mtrain_evalf = os.path.join(mosesfp_dir,mtrainfname+".eval")
 	   mtest_evalf = os.path.join(mosesfp_dir,mtestfname+".eval")
-	   #check from here
+	   #start
 	   eval_output(os.path.join(trtstdir,mtrainfname),combof,mtrain_evalf)
 	   eval_output(os.path.join(trtstdir,mtestfname),combof,mtest_evalf)
 	   mtrain_prec = get_precision(mtrain_evalf,os.path.join(trtstdir,mtrainfname))

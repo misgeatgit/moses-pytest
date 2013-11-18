@@ -31,7 +31,7 @@ def start(args):
 			copy(moses_binf,data_dir)
 			moses_binf = os.path.join(data_dir,mbinf)
 			#run train-test.py
-			os.system("python train-test.py -i %s -o %s"%(moses_binf,data_dir)
+			os.system("python train_test.py -i %s -o %s"%(moses_binf,data_dir)
 			#run run_exp.py
 			conff  = os.path.abspath(MOSES_PARAMA_CONFIG_FILE)
 			logf   = os.join(log_dir,mbinf_name+".train_1to1.moses.log")

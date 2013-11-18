@@ -1,7 +1,10 @@
 #!/bin/python2.7
+
 import os
 import csv
 import argparse
+
+
 EVAL_TABLE_PATH="/home/addis-ai/opencog_ocpkg/opencog/build/opencog/comboreduct/main/eval-table"
 """Extract the combo programs from a given moses output file
    params    moses output file,combo file to be saved
@@ -88,7 +91,7 @@ if __name__ == "__main__":
 	usage = "usage: %prog [options]\n"
 	parser = argparse.ArgumentParser(usage)						
 	parser.add_argument("-i", "--mosesf",nargs=1,help = "moses binary file")
-	parser.add_argument("-d", "--trtstdir",nargs=1,help = "output file")
+	parser.add_argument("-d", "--trtstdir",nargs=1,help = "evaluation output file")
 	parser.add_argument("-c", "--combof",nargs=1,help = "file where combo program is within")	
 	args = parser.parse_args()
 	if args.mosesf and args.trtstdir and args.combof:

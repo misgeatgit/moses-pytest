@@ -5,6 +5,7 @@ import argparse
 from os import path
 import os
 
+
 MOSES_PATH="/home/addis-ai/opencog_ocpkg/opencog/build/opencog/learning/moses/main/moses"
 #general program options
 MGPO=" -u OUT -l debug -V 1 -W 1 -x 1 -t 1 -r 1 "

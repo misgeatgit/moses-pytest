@@ -16,7 +16,7 @@ MFSPO=" --enable-fs 1 "
 #message
 message=""
 """loads parameter setting of moses
-   params
+   params:
    mfile - file to be analyzed by moses
    cfile - moses param config file
    lfile - the file name that moses should put the log
@@ -126,7 +126,7 @@ if  __name__ == "__main__":
 	if args.ifile and args.ofile and args.lfile and args.cfile:
 	   load_configuration(path.abspath(args.cfile[0]),path.abspath(args.ifile[0]),path.abspath(args.lfile[0]),path.abspath(args.ofile[0]))
 	   margs = "%s %s %s "%(MGPO,MLPO,MFSPO)
-	   print margs
+	   print MOSES_PATH+margs
 	   run_moses(MOSES_PATH,margs)
 	  
 	else:

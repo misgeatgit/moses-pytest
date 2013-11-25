@@ -7,13 +7,13 @@ from random import randint
 
 def get_test_list(f):
 	test_dict = {}
-	fobject = open(f,'r')	
+	fobject   = open(f,'r')	
 	try:		
-		rows = csv.reader(fobject)		
-		mlist = list(rows)
+		rows         = csv.reader(fobject)		
+		mlist        = list(rows)
 		test_dict[0] = mlist[0] #add the header
-		prev_rands = [0]		
-		ln = int((len(mlist)-1)/3)				
+		prev_rands   = [0]		
+		ln           = int((len(mlist)-1)/3)				
 		for r in range(0,ln):
 			i = randint(1,len(mlist)-1)
 			while i in prev_rands: #make sure a new valide index is selected
@@ -44,8 +44,8 @@ def save_train_file(saving_dir,dataset_name,dtype):
 	ofile=""
 	if dtype == "COMBINED":	
 		train_list = get_combined_train(dataset_name) # in this case dataset name is a parent directory
-		ofile      = open(get_path(saving_dir,"%s.train_1to1"%("combined")),"w") 
-		print "no of columns in combined train list = %s"%(len(train_list[0]))
+		ofile      = open(get_path(saving_dir,"%s.train_1to1"%("combined.moses")),"w") 
+		#print "no of columns in combined train list = %s"%(len(train_list[0]))
 	if dtype == "SINGLE":
 		train_list = get_train_list(dataset_name)
 		ofile      = open(get_path(saving_dir,"%s.train_1to1"%dataset_name),"w") 	
@@ -59,7 +59,7 @@ def save_test_file(saving_dir,dataset_name,dtype):
 	test_list = {}	
 	if dtype == "COMBINED":	
 		test_list = get_combined_test(dataset_name) # in this case dataset name is a parent directory
-		ofile     = open(get_path(saving_dir,"%s.test_1to1"%("combined")),"w")
+		ofile     = open(get_path(saving_dir,"%s.test_1to1"%("combined.moses")),"w")
 	if dtype == "SINGLE":
 		test_list = get_test_list(dataset_name)
 		ofile     = open(get_path(saving_dir,"%s.test_1to1"%dataset_name),"w") 	
@@ -81,7 +81,7 @@ def get_combined_test(mfile_dir):
 		test[0] = mlist[0]  # add the header to test	
 		i      += 1	
 	finally:
-		fobject.close()		
+		fobject.close()			
 	for m_binf in moses_binfs:
 		m_binf    = os.path.join(mfile_dir,m_binf)							
 		test_temp = get_test_list(m_binf)
@@ -91,7 +91,7 @@ def get_combined_test(mfile_dir):
 			i      += 1					
 	return test
 def get_combined_train(mfile_dir):
-	print "@DEBUG get_combined_train() mfile_dir=%s"%(mfile_dir)
+	#print "@DEBUG get_combined_train() mfile_dir=%s"%(mfile_dir)	
 	moses_binfs    = [ f for f in os.listdir(mfile_dir) if os.path.isfile(os.path.join(mfile_dir,f)) ] # assuming no other type of file is listed in this dir	
 	train          = {}
 	rand_mfile     = os.path.join(mfile_dir,moses_binfs[0])
@@ -103,11 +103,11 @@ def get_combined_train(mfile_dir):
 		train[0] = mlist[0]  # add the header to test
 		i       += 1				
 	finally:
-		fobject.close()		
+		fobject.close()				
 	for m_binf in moses_binfs:
 		m_binf     = os.path.join(mfile_dir,m_binf)							
 		train_temp = get_train_list(m_binf)
-		del train_temp[0] 	# delete header since its already added				
+		del train_temp[0] 	# delete header since its already added						
 		for key in train_temp:			
 			train[i] = train_temp[key] # append each test files
 			i       += 1						
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 		file_path  = os.path.abspath(args.dataset_file[0])		
 		saving_dir = os.path.abspath(args.saving_dir[0])
 		if args.recursive:
-			print "started saving combined train test file preparation"
+			print "started saving combined train test file preparation..."
 			save_train_file(saving_dir,file_path,"COMBINED")
 			save_test_file(saving_dir,file_path,"COMBINED")
 			print "saved combined train test to %s"%(saving_dir)

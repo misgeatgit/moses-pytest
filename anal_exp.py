@@ -103,30 +103,37 @@ if __name__ == "__main__":
 	usage = "usage: %prog [options]\n"
 	parser = argparse.ArgumentParser(usage)						
 	parser.add_argument("-i", "--mosesf",nargs=1,help = "moses binary file")
-	parser.add_argument("-d", "--trtstdir",nargs=1,help = "evaluation output file dir")
-	parser.add_argument("-c", "--combof",nargs=1,help = "file where combo program is within")	
+	parser.add_argument("-d", "--trtstdir",nargs=1,help = "moses traing test andn evaluation output file dir")
+	parser.add_argument("-c", "--combof",nargs=1,help = "file where combo program is within")
+	parser.add_argument("-s","--single",nargs=1,help="single and combined flag")	
 	args = parser.parse_args()
 	if args.mosesf and args.trtstdir and args.combof:
-	   trtstdir = os.path.abspath(args.trtstdir[0]) # a dir to store eval-table output
-	   moses_resf = os.path.abspath(args.combof[0]) # 
-	   mosesf = os.path.abspath(args.mosesf[0])
-	   mosesfp_dir = os.path.split(mosesf)[0] # moses bin file parent directory
-	   combofp_dir = os.path.split(moses_resf)[0]
-	   mosesfname = os.path.split(mosesf)[1]
-	   mtrainfname = "%s.train_1to1"%(mosesfname)	   
-	   mtestfname = "%s.test_1to1"%(mosesfname)
-	   combof = os.path.join(combofp_dir,"%s.combo"%(mtrainfname))
-	   parse_output(moses_resf,combof)
-	   mtrain_evalf = os.path.join(mosesfp_dir,mtrainfname+".eval")
-	   mtest_evalf = os.path.join(mosesfp_dir,mtestfname+".eval")
-	   #start
-	   eval_output(os.path.join(trtstdir,mtrainfname),combof,mtrain_evalf)
-	   eval_output(os.path.join(trtstdir,mtestfname),combof,mtest_evalf)
-	   mtrain_prec = get_precision(mtrain_evalf,os.path.join(trtstdir,mtrainfname))
-	   mtrain_rec = get_recall(mtrain_evalf,os.path.join(trtstdir,mtrainfname))
-	   mtest_prec = get_precision(mtest_evalf,os.path.join(trtstdir,mtestfname))
-	   mtest_rec = get_recall(mtest_evalf,os.path.join(trtstdir,mtestfname))
-	   save_result([mtrain_prec,mtrain_rec,mtest_prec,mtest_rec],os.path.join(os.path.split(mosesfp_dir)[0],"results.csv"))	   	
+		mtrainfname=""
+		mtestfname=""				
+		if args.single:
+			mtrainfname = "%s.train_1to1"%("combined.moses")
+			mtestfname = "%s.test_1to1"%("combined.moses")
+			mosesfp_dir=""			
+		else:	
+		   mosesf = os.path.abspath(args.mosesf[0])
+		   mosesfname = os.path.split(mosesf)[1]
+		   mtrainfname = "%s.train_1to1"%(mosesfname)	   
+		   mtestfname = "%s.test_1to1"%(mosesfname)		 
+		trtstdir = os.path.abspath(args.trtstdir[0]) # a dir to store eval-table output
+		moses_resf = os.path.abspath(args.combof[0]) # 	
+		combofp_dir = os.path.split(moses_resf)[0]	   
+		combof = os.path.join(combofp_dir,"%s.combo"%(mtrainfname))
+		parse_output(moses_resf,combof)
+		mtrain_evalf = os.path.join(trtstdir,mtrainfname+".eval")
+		mtest_evalf = os.path.join(trtstdir,mtestfname+".eval")
+		#start
+		eval_output(os.path.join(trtstdir,mtrainfname),combof,mtrain_evalf)
+		eval_output(os.path.join(trtstdir,mtestfname),combof,mtest_evalf)
+		mtrain_prec = get_precision(mtrain_evalf,os.path.join(trtstdir,mtrainfname))
+		mtrain_rec = get_recall(mtrain_evalf,os.path.join(trtstdir,mtrainfname))
+		mtest_prec = get_precision(mtest_evalf,os.path.join(trtstdir,mtestfname))
+		mtest_rec = get_recall(mtest_evalf,os.path.join(trtstdir,mtestfname))
+		save_result([mtrain_prec,mtrain_rec,mtest_prec,mtest_rec],os.path.join(os.path.split(trtstdir)[0],"results.csv"))	   	
 	else:
 		parser.print_help()   
 	

@@ -24,7 +24,8 @@ complexity_ratio=2
 ######################
 dpressure=0.1
 dexp=1
-dst=tanimoto
+#dst=tanimoto
+dst=angular
 #########################
 [pre feature selection]
 #########################
